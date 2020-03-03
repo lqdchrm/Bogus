@@ -12,7 +12,7 @@ namespace Bogus
       public object[] OptionalArgs { get; set; }
    }
 
-   public class Tokenizer
+   public static class Tokenizer
    {
       public static ILookup<string, MustashMethod> MustashMethods;
 
@@ -111,7 +111,8 @@ namespace Bogus
          {
             var argumentsString = GetArgumentsString(methodCall, argumentsStart);
             methodName = methodCall.Substring(0, argumentsStart).Trim();
-            arguments = argumentsString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
+            arguments = argumentsString.StartsWith("[") ? new string[] { argumentsString } :
+               argumentsString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
          }
          else
          {
@@ -164,6 +165,9 @@ namespace Bogus
          if( typeof(Enum).IsAssignableFrom(type)) return Enum.Parse(type, parameterValue);
 
          if( typeof(TimeSpan) == type ) return TimeSpan.Parse(parameterValue);
+
+         if (typeof(Array) == type) return parameterValue.Replace("[", "").Replace("]", "").
+               Split(new string[] { "," }, StringSplitOptions.None).Select(p => Convert.ChangeType(p?.Trim(), typeof(string))).ToArray();
 
          return Convert.ChangeType(parameterValue, type);
       }
