@@ -12,7 +12,7 @@ namespace Bogus
       public object[] OptionalArgs { get; set; }
    }
 
-   public static class Tokenizer
+   public class Tokenizer
    {
       public static ILookup<string, MustashMethod> MustashMethods;
 
