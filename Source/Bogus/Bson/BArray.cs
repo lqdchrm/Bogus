@@ -23,7 +23,7 @@ namespace Bogus.Bson
 
       public int Count => items.Count;
 
-      public override void Add(BValue v) => items.Add(v);
+      public override void Add(BValue value) => items.Add(value);
 
       public int IndexOf(BValue item) => items.IndexOf(item);
 
